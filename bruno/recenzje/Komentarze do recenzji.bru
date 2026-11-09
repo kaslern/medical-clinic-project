@@ -1,0 +1,21 @@
+meta {
+  name: Komentarze do recenzji
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/posts/1/comments
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
