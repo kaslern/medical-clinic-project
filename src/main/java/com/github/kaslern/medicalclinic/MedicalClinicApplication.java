@@ -1,5 +1,6 @@
 package com.github.kaslern.medicalclinic;
 
+import com.github.kaslern.medicalclinic.patient.PatientService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
