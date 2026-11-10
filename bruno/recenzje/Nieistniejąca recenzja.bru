@@ -1,0 +1,21 @@
+meta {
+  name: Nieistniejąca recenzja
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/posts/999
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 404
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
