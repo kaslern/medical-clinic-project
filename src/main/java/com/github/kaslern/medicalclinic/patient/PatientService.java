@@ -41,6 +41,13 @@ public class PatientService {
         });
     }
 
+    public Optional<Patient> changePassword(String email, String password) {
+        return patientRepository.findByEmail(email).map( existing -> {
+            existing.setPassword(password);
+            return patientRepository.save(existing);
+        });
+    }
+
     public void deleteByEmail(String email)  {
         patientRepository.deleteByEmail(email);
     }
