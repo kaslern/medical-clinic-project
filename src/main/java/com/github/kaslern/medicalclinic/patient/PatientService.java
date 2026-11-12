@@ -3,6 +3,9 @@ package com.github.kaslern.medicalclinic.patient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class PatientService {
@@ -18,6 +21,28 @@ public class PatientService {
 
     public int countPatients() {
         return patientRepository.findAll().size();
+    }
+
+    public List<Patient> getAllPatients() {
+        return patientRepository.findAll();
+    }
+
+    public Optional<Patient> findByEmail(String email) {
+        return patientRepository.findByEmail(email);
+    }
+
+    public Optional<Patient> update(String email, Patient changes) {
+        return patientRepository.findByEmail(email).map(existing -> {
+            existing.setFirstName(changes.getFirstName());
+            existing.setLastName(changes.getLastName());
+            existing.setPhoneNumber(changes.getPhoneNumber());
+            existing.setBirthday(changes.getBirthday());
+            return patientRepository.save(existing);
+        });
+    }
+
+    public void deleteByEmail(String email)  {
+        patientRepository.deleteByEmail(email);
     }
 
 }

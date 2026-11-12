@@ -18,12 +18,18 @@ public class InMemoryPatientRepository implements PatientRepository {
     }
 
     @Override
-    public void save(Patient patient) {
+    public Patient save(Patient patient) {
         patients.put(patient.getEmail(), patient);
+        return patient;
     }
 
     @Override
     public List<Patient> findAll() {
         return List.copyOf(patients.values());
+    }
+
+    @Override
+    public void deleteByEmail(String email) {
+        patients.remove(email);
     }
 }
