@@ -1,13 +1,17 @@
 meta {
-  name: Komentarze do recenzji
+  name: Get patient by email
   type: http
-  seq: 4
+  seq: 3
 }
 
 get {
-  url: {{baseUrl}}/posts/1/comments
+  url: {{baseUrl}}/patients?email=anna.nowak@example.com
   body: none
   auth: inherit
+}
+
+params:query {
+  email: anna.nowak@example.com
 }
 
 assert {

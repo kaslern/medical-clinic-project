@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "ksiegarnia-api-testowe",
+  "name": "medical-clinic",
   "type": "collection",
   "ignore": [
     "node_modules",

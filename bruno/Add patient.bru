@@ -1,0 +1,33 @@
+meta {
+  name: Add patient
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/patients
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "anna.nowak@example.com",
+    "password": "Tajne#2026",
+    "idCardNo": "ABC123456",
+    "firstName": "Anna",
+    "lastName": "Nowak",
+    "phoneNumber": "600100200",
+    "birthday": "1990-05-12"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
