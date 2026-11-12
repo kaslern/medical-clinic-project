@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +29,9 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addPatient(@RequestBody Patient patient) {
-        patientService.addPatient(patient);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Patient> add(@RequestBody Patient patient) {
+        Patient saved = patientService.addPatient(patient);
+        return ResponseEntity.created(URI.create("/patients/" + saved.getEmail())).body(saved);
     }
 
     @PutMapping("/{email}")

@@ -12,11 +12,11 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
 
-    public void addPatient(Patient patient) {
+    public Patient addPatient(Patient patient) {
         if (patientRepository.findByEmail(patient.getEmail()).isPresent()) {
             throw new PatientAlreadyExistException(patient.getEmail());
         }
-        patientRepository.save(patient);
+       return patientRepository.save(patient);
     }
 
     public int countPatients() {
