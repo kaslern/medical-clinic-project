@@ -1,0 +1,57 @@
+package com.github.kaslern.medicalclinic.patient;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/patients")
+@RequiredArgsConstructor
+public class PatientController {
+
+    private final PatientService patientService;
+
+    @GetMapping
+    public List<Patient> findAll() {
+        return patientService.getAllPatients();
+    }
+
+    @GetMapping(params = "email")
+    public ResponseEntity<Patient> findByEmail(@RequestParam String email) {
+        return patientService.findByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Patient> add(@RequestBody Patient patient) {
+        Patient saved = patientService.addPatient(patient);
+        return ResponseEntity.created(URI.create("/patients/" + saved.getEmail())).body(saved);
+    }
+
+    @PutMapping("/{email}")
+    public ResponseEntity<Patient> update(@PathVariable String email, @RequestBody Patient patient) {
+        return patientService.update(email, patient)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/{email}/password")
+    public ResponseEntity<Patient> changePassword(@PathVariable String email,
+                                                  @RequestBody Map<String, String> body) {
+        return patientService.changePassword(email, body.get("password"))
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{email}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteByEmail(@PathVariable String email) {
+        patientService.deleteByEmail(email);
+    }
+}

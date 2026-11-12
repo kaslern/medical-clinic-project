@@ -1,0 +1,30 @@
+meta {
+  name: Change patient data
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/patients/anna.nowak@example.com
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "firstName": "Anna Maria",
+    "lastName": "Kowalska",
+    "phoneNumber": "789456123",
+    "birthday": "1991-08-20"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
