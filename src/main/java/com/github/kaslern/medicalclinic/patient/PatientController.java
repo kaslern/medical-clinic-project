@@ -1,14 +1,20 @@
 package com.github.kaslern.medicalclinic.patient;
 
+import com.github.kaslern.medicalclinic.patient.dto.PasswordChangeCommand;
+import com.github.kaslern.medicalclinic.patient.dto.PatientCreateCommand;
+import com.github.kaslern.medicalclinic.patient.dto.PatientUpdateCommand;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.github.kaslern.medicalclinic.patient.dto.PatientDto;
 
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/patients")
 @RequiredArgsConstructor
@@ -17,34 +23,36 @@ public class PatientController {
     private final PatientService patientService;
 
     @GetMapping
-    public List<Patient> findAll() {
+    public List<PatientDto> findAll() {
         return patientService.getAllPatients();
     }
 
     @GetMapping(params = "email")
-    public ResponseEntity<Patient> findByEmail(@RequestParam String email) {
+    public ResponseEntity<PatientDto> findByEmail(@RequestParam String email) {
         return patientService.findByEmail(email)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Patient> add(@RequestBody Patient patient) {
-        Patient saved = patientService.addPatient(patient);
-        return ResponseEntity.created(URI.create("/patients/" + saved.getEmail())).body(saved);
+    public ResponseEntity<PatientDto> add(@RequestBody PatientCreateCommand command) {
+        log.info("Creating patient: {}", command);
+        PatientDto saved = patientService.addPatient(command);
+        return ResponseEntity.created(URI.create("/patients/" + command.email())).body(saved);
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<Patient> update(@PathVariable String email, @RequestBody Patient patient) {
-        return patientService.update(email, patient)
+    public ResponseEntity<PatientDto> update(@PathVariable String email, @RequestBody PatientUpdateCommand command) {
+        return patientService.update(email, command)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/{email}/password")
-    public ResponseEntity<Patient> changePassword(@PathVariable String email,
-                                                  @RequestBody Map<String, String> body) {
-        return patientService.changePassword(email, body.get("password"))
+    public ResponseEntity<PatientDto> changePassword(@PathVariable String email,
+                                                  @RequestBody PasswordChangeCommand command) {
+        log.info("Request: {}", command);
+        return patientService.changePassword(email, command)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
