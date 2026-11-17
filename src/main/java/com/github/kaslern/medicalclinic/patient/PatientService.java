@@ -38,7 +38,8 @@ public class PatientService {
     }
 
     public Optional<PatientDto> update(String email, PatientUpdateCommand command) {
-        return patientRepository.findByEmail(email).map(patient -> { patientMapper.update(command, patient);
+        return patientRepository.findByEmail(email)
+                .map(patient -> { patientMapper.update(command, patient);
             return patientMapper.toDto(patientRepository.save(patient));
         });
     }

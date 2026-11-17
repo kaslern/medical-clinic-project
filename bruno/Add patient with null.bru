@@ -1,0 +1,33 @@
+meta {
+  name: Add patient with null
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/patients
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": null,
+    "password": "Tajne#2026",
+    "idCardNo": "ABC123456",
+    "firstName": "Anna",
+    "lastName": "Nowak",
+    "phoneNumber": "600100200",
+    "birthday": "1990-05-12"
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+  forwardAuthorizationHeader: false
+}
