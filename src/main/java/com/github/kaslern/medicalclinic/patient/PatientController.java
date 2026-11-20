@@ -40,19 +40,16 @@ public class PatientController {
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<PatientDto> update(@PathVariable String email, @Valid @RequestBody PatientUpdateCommand command) {
-        return patientService.update(email, command)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public PatientDto update(@PathVariable String email, @Valid @RequestBody PatientUpdateCommand command) {
+        return patientService.update(email, command);
     }
 
     @PatchMapping("/{email}/password")
-    public ResponseEntity<PatientDto> changePassword(@PathVariable String email,
+    public PatientDto changePassword(@PathVariable String email,
                                                      @Valid @RequestBody PasswordChangeCommand command) {
         log.info("Request: {}", command);
-        return patientService.changePassword(email, command)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return patientService.changePassword(email, command);
+
     }
 
     @DeleteMapping("/{email}")

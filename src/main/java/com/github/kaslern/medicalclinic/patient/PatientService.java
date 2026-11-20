@@ -41,18 +41,23 @@ public class PatientService {
                         "patient with email " + email + " not found"));
     }
 
-    public Optional<PatientDto> update(String email, PatientUpdateCommand command) {
+    public PatientDto update(String email, PatientUpdateCommand command) {
         return patientRepository.findByEmail(email)
                 .map(patient -> { patientMapper.update(command, patient);
             return patientMapper.toDto(patientRepository.save(patient));
-        });
+        })
+                .orElseThrow(() -> new MedicalClinicException(MedicalClinicError.PATIENT_NOT_FOUND,
+                "patient with email " + email + " not found"));
     }
 
-    public Optional<PatientDto> changePassword(String email, PasswordChangeCommand command) {
-        return patientRepository.findByEmail(email).map( existing -> {
+    public PatientDto changePassword(String email, PasswordChangeCommand command) {
+        return patientRepository.findByEmail(email)
+                .map( existing -> {
             existing.changePassword(command.password());
             return patientMapper.toDto(patientRepository.save(existing));
-        });
+        })
+                .orElseThrow(() -> new MedicalClinicException(MedicalClinicError.PATIENT_NOT_FOUND,
+                        "patient with email " + email + " not found"));
     }
 
     public void deleteByEmail(String email)  {
