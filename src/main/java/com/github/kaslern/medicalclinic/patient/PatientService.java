@@ -1,5 +1,7 @@
 package com.github.kaslern.medicalclinic.patient;
 
+import com.github.kaslern.medicalclinic.exception.MedicalClinicError;
+import com.github.kaslern.medicalclinic.exception.MedicalClinicException;
 import com.github.kaslern.medicalclinic.patient.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,7 @@ public class PatientService {
 
     public PatientDto addPatient(PatientCreateCommand command) {
         if (patientRepository.findByEmail(command.email()).isPresent()) {
-            throw new PatientAlreadyExistException(command.email());
+            throw new MedicalClinicException(MedicalClinicError.PATIENT_ALREADY_EXIST, "Patient already exist");
         }
         Patient patient = patientMapper.toEntity(command);
         return patientMapper.toDto(patientRepository.save(patient));
@@ -32,9 +34,11 @@ public class PatientService {
                 .toList();
     }
 
-    public Optional<PatientDto> findByEmail(String email) {
+    public PatientDto findByEmail(String email) {
         return patientRepository.findByEmail(email)
-                .map(patientMapper::toDto);
+                .map(patientMapper::toDto)
+                .orElseThrow(() -> new MedicalClinicException(MedicalClinicError.PATIENT_NOT_FOUND,
+                        "patient with email " + email + " not found"));
     }
 
     public Optional<PatientDto> update(String email, PatientUpdateCommand command) {
