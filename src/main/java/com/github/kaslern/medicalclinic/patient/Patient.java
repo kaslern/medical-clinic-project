@@ -1,29 +1,41 @@
 package com.github.kaslern.medicalclinic.patient;
 
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
-@NoArgsConstructor
-@ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Table(name = "patients")
+@ToString(exclude = {"password", "idCardNo"})
 
 public class Patient {
 
-    @Setter
-    private String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @ToString.Exclude
-    private String password;
     @Setter
-    @ToString.Exclude
+    @Column(nullable = false, unique = true)
+    private String email;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false, unique = true)
+    @Setter
     private String idCardNo;
+    @Column(nullable = false)
     @Setter
     private String firstName;
+    @Column(nullable = false)
     @Setter
     private String lastName;
+    @Column(nullable = false)
     @Setter
     private String phoneNumber;
+    @Column(nullable = false)
     @Setter
     private LocalDate birthday;
 

@@ -3,6 +3,7 @@ package com.github.kaslern.medicalclinic.patient;
 import com.github.kaslern.medicalclinic.exception.MedicalClinicError;
 import com.github.kaslern.medicalclinic.exception.MedicalClinicException;
 import com.github.kaslern.medicalclinic.patient.dto.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,7 +60,7 @@ public class PatientService {
                 .orElseThrow(() -> new MedicalClinicException(MedicalClinicError.PATIENT_NOT_FOUND,
                         "patient with email " + email + " not found"));
     }
-
+    @Transactional
     public void deleteByEmail(String email)  {
         patientRepository.deleteByEmail(email);
     }
